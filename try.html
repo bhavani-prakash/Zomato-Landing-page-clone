@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Smooth Looping Carousel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      text-align: center;
+    }
+
+    .slider-container {
+      max-width: 800px;
+      margin: 30px auto;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .slider-track {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .slide {
+      min-width: 100%;
+    }
+
+    .slide img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .fixed-caption {
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-top: 10px;
+      min-height: 40px;
+    }
+
+    @media (min-width: 768px) {
+      .slider-track {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        transform: none !important;
+        transition: none !important;
+      }
+
+      .slide {
+        min-width: auto;
+      }
+
+      .fixed-caption {
+        display: none;
+      }
+
+      .desktop-captions {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 15px;
+        gap: 10px;
+      }
+
+      .desktop-caption {
+        width: 100%;
+        font-weight: 500;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="slider-container">
+    <div class="slider-track" id="sliderTrack">
+      <div class="slide"><img src="https://source.unsplash.com/800x400/?pizza" alt="Pizza"></div>
+      <div class="slide"><img src="https://source.unsplash.com/800x400/?burger" alt="Burger"></div>
+      <div class="slide"><img src="https://source.unsplash.com/800x400/?pasta" alt="Pasta"></div>
+      <!-- Clone of the first slide -->
+      <div class="slide"><img src="https://source.unsplash.com/800x400/?pizza" alt="Pizza Clone"></div>
+    </div>
+  </div>
+
+  <!-- Mobile text -->
+  <div class="fixed-caption" id="captionText">Delicious Pizza</div>
+
+  <!-- Desktop text -->
+  <div class="desktop-captions">
+    <div class="desktop-caption">Delicious Pizza</div>
+    <div class="desktop-caption">Juicy Burger</div>
+    <div class="desktop-caption">Creamy Pasta</div>
+  </div>
+
+  <script>
+    const track = document.getElementById("sliderTrack");
+    const captions = [
+      "Delicious Pizza",
+      "Juicy Burger",
+      "Creamy Pasta"
+    ];
+
+    const captionText = document.getElementById("captionText");
+    const slideCount = captions.length;
+    let currentIndex = 0;
+
+    function moveSlide() {
+      if (window.innerWidth < 768) {
+        currentIndex++;
+        track.style.transition = "transform 0.5s ease-in-out";
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+        
+        if (currentIndex === slideCount) {
+          captionText.textContent = captions[0];
+        } else {
+          captionText.textContent = captions[currentIndex];
+        }
+
+        // Loop logic
+        if (currentIndex === slideCount) {
+          setTimeout(() => {
+            track.style.transition = "none";
+            track.style.transform = "translateX(0)";
+            currentIndex = 0;
+          }, 500); // same as CSS transition time
+        }
+      }
+    }
+
+    setInterval(moveSlide, 3000);
+  </script>
+
+</body>
+</html>
